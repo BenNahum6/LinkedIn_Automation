@@ -41,4 +41,4 @@ def login(driver):
         logger.info("Login successful.")
     else:
         logger.error("Login failed!", exc_info=True)
-        raise AssertionError("Login failed!")
+        raise AssertionError("Login failed.")
