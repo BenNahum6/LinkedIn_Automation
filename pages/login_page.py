@@ -6,17 +6,20 @@ from utils.config import LINKEDIN_EMAIL, LINKEDIN_PASSWORD, LINKEDIN_LOGIN_URL
 class LoginPage:
     def __init__(self, driver):
         """
+        Initializes the class with a WebDriver instance.
 
-        :param driver:
+        :param driver: The Selenium WebDriver instance used to interact with the web page.
         """
         self.driver = driver
         self.wait = WebDriverWait(driver, 10)
 
     def login(self):
         """
+        Logs into LinkedIn using provided credentials.
 
-        :return:
+        :return: None
         """
+
         # Opens the browser with the LinkedIn url
         self.driver.get(LINKEDIN_LOGIN_URL)
 
