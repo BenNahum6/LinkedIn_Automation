@@ -1,7 +1,10 @@
+from time import sleep
+
 import pytest
 from selenium import webdriver
 from pages.login_page import LoginPage
 from utils.logger import logger
+from selenium_stealth import stealth
 
 logger.info("Starting conftest:")
 
@@ -18,8 +21,37 @@ def driver():
     :return: Selenium WebDriver instance
     """
     logger.info("Creating driver.")
-    driver = webdriver.Chrome()
+
+    options = webdriver.ChromeOptions()
+    options.add_argument("--disable-blink-features=AutomationControlled")
+    options.add_argument(
+        "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+
+    driver = webdriver.Chrome(options=options)
+
+    stealth(driver,
+            languages=["en-US", "en"],
+            vendor="Google Inc.",
+            platform="Win32",
+            webgl_vendor="Intel Inc.",
+            renderer="Intel Iris OpenGL Engine",
+            fix_hairline=True)
+
+    driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
+
     driver.maximize_window()
+    # print("\n🔍 Checking stealth settings...\n")
+    # print("navigator.webdriver:", driver.execute_script("return navigator.webdriver"))  # צריך להחזיר None
+    # print("navigator.userAgent:",
+    #       driver.execute_script("return navigator.userAgent"))  # צריך להחזיר את ה-User-Agent שהגדרת
+    # print("navigator.languages:", driver.execute_script("return navigator.languages"))  # צריך להחזיר ['en-US', 'en']
+    #
+    # # בדיקה באתר שמזהה בוטים
+    # driver.get("https://bot.sannysoft.com/")
+    # print("\n🚀 Go to https://bot.sannysoft.com/ and check if everything is 'green'.\n")
+
+    sleep(1)
+
     yield driver
     logger.info("Deleting driver.")
     driver.quit()

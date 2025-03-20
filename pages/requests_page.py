@@ -16,17 +16,18 @@ class RequestsPage:
     def navigate_to_my_network(self):
         """
         Navigates to the "My Network" page on LinkedIn by clicking the navigation button.
+        Waits for a unique element on the page to ensure it has fully loaded.
         """
-
         logger.info("navigate_to_my_network started:")
 
         try:
-            logger.info("finde my_network_button element")
-            my_network_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//a[contains(@href, 'mynetwork')]")))
+            logger.info("Finding 'My Network' button.")
+            my_network_button = self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "a[href*='mynetwork']")))
+            print(my_network_button.text)  # מדפיס את הטקסט של האלמנט אם נמצא
 
-            logger.info("clicking my_network_button element")
+            logger.info("Clicking 'My Network' button.")
             my_network_button.click()
 
         except Exception as e:
-            logger.error(f"Error when trying to click 'My Network': {e}", exc_info=True)
-            raise
+            logger.error(f"Error when trying to navigate to 'My Network': {e}", exc_info=True)
+            raise AssertionError("Failed to load My Network page.")
