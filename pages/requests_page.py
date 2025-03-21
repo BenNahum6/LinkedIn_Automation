@@ -17,13 +17,16 @@ class RequestsPage:
         """
         Navigates to the "My Network" page on LinkedIn by clicking the navigation button.
         Waits for a unique element on the page to ensure it has fully loaded.
+
+        :return: None
         """
+
         logger.info("navigate_to_my_network started:")
 
         try:
             logger.info("Finding 'My Network' button.")
             my_network_button = self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "a[href*='mynetwork']")))
-            print(my_network_button.text)  # מדפיס את הטקסט של האלמנט אם נמצא
+            print(my_network_button.text)
 
             logger.info("Clicking 'My Network' button.")
             my_network_button.click()
