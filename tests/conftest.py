@@ -1,6 +1,6 @@
-from time import sleep
-
 import pytest
+from time import sleep
+import random
 from selenium import webdriver
 from pages.login_page import LoginPage
 from utils.logger import logger
@@ -50,7 +50,7 @@ def driver():
     # driver.get("https://bot.sannysoft.com/")
     # print("\n🚀 Go to https://bot.sannysoft.com/ and check if everything is 'green'.\n")
 
-    sleep(1)
+    sleep(random.uniform(2, 5))
 
     yield driver
     logger.info("Deleting driver.")
