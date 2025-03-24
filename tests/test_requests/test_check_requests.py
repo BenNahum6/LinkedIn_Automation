@@ -15,7 +15,6 @@ def test_check_requests(requests_page):
     invitations_text = requests_page.get_pending_invitations_text()
 
     logger.info(f"Invitations text: {invitations_text}")
-    print(f"Invitations text: {invitations_text}")
 
     number_of_requests = extract_number_from_invitations_text(invitations_text)
     if number_of_requests == 0:
@@ -23,7 +22,9 @@ def test_check_requests(requests_page):
         pytest.skip("No pending requests found. Skipping the test.")
 
     if number_of_requests > 3:
+        logger.info(f"Invitations requests is more than 3: {invitations_text}.")
         requests_page.get_show_all()
+        logger.info(f"Invitations requests clicked.")
 
 
     assert number_of_requests > 0, "There should be at least one pending request."
@@ -42,6 +43,9 @@ def test_accept_requests(requests_page):
 
     accepted_count = requests_page.accept_all_requests()
     logger.info(f"Accepted count: {accepted_count}")
+
+    logger.info(f'extract_number_from_invitations_text.')
+    accepted_count = extract_number_from_invitations_text(accepted_count)
 
     if accepted_count == 0:
         logger.info("All connection requests have been accepted.")

@@ -81,7 +81,6 @@ class RequestsPage:
     def accept_all_requests(self):
         """
         Finds and clicks all 'Accept' buttons on the LinkedIn connection requests page.
-
         :return: Number of pending invitations remaining after accepting.
         """
         logger.info("accept_all_requests started:")
@@ -93,21 +92,35 @@ class RequestsPage:
             logger.error(f"Failed to load the Invitations page: {e}", exc_info=True)
             return 0
 
-        accept_buttons = self.driver.find_elements(By.XPATH, "//button[contains(text(),'Accept')]")
-        logger.info(f"Found {len(accept_buttons)} 'Accept' buttons.")
+        # # Scroll to load all invitations (in case of lazy loading)
+        # last_height = self.driver.execute_script("return document.body.scrollHeight")
+        # while True:
+        #     self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        #     new_height = self.driver.execute_script("return document.body.scrollHeight")
+        #     if new_height == last_height:
+        #         break
+        #     last_height = new_height
 
-        if not accept_buttons:
-            logger.error("No 'Accept' buttons found.")
+        # Locate buttons with more precise selectors
+        try:
+            accept_buttons = self.driver.find_elements(By.XPATH, "//button[contains(@aria-label, 'Accept invitation')]")
+            logger.info(f"Found {len(accept_buttons)} 'Accept' buttons.")
+        except Exception as e:
+            logger.error(f"Failed to find 'Accept' buttons: {e}", exc_info=True)
             return 0
 
-        for button in accept_buttons:
+        if not accept_buttons:
+            logger.warning("No 'Accept' buttons found.")
+            return 0
+
+        # Click all Accept buttons
+        for index, button in enumerate(accept_buttons):
             try:
-                logger.info("Clicking 'Accept' button.")
+                logger.info(f"Clicking 'Accept' button #{index + 1}.")
                 button.click()
             except Exception as e:
-                logger.error(f"Error when trying to click 'Accept' button: {e}", exc_info=True)
+                logger.error(f"Error when trying to click 'Accept' button #{index + 1}: {e}", exc_info=True)
 
         num = self.get_pending_invitations_text()
         logger.info(f"Found {num} pending invitations after accepting.")
-
         return num

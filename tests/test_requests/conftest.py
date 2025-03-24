@@ -3,7 +3,7 @@ from utils.logger import logger
 from pages.requests_page import RequestsPage
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="session")
 def requests_page(driver):
     """
     Navigates to the 'My Network' page on LinkedIn before running a test.
