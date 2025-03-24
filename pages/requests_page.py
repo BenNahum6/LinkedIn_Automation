@@ -26,7 +26,6 @@ class RequestsPage:
         try:
             logger.info("Finding 'My Network' button.")
             my_network_button = self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "a[href*='mynetwork']")))
-            print(my_network_button.text)
 
             logger.info("Clicking 'My Network' button.")
             my_network_button.click()
@@ -79,3 +78,36 @@ class RequestsPage:
             logger.error(f"Error when trying to navigate to 'show all': {e}", exc_info=True)
             raise AssertionError("Failed to load show all page.")
 
+    def accept_all_requests(self):
+        """
+        Finds and clicks all 'Accept' buttons on the LinkedIn connection requests page.
+
+        :return: Number of pending invitations remaining after accepting.
+        """
+        logger.info("accept_all_requests started:")
+
+        try:
+            self.wait.until(EC.visibility_of_element_located((By.XPATH, "//h2[contains(., 'Invitation')]")))
+            logger.info("Page with Invitations header is fully loaded.")
+        except Exception as e:
+            logger.error(f"Failed to load the Invitations page: {e}", exc_info=True)
+            return 0
+
+        accept_buttons = self.driver.find_elements(By.XPATH, "//button[contains(text(),'Accept')]")
+        logger.info(f"Found {len(accept_buttons)} 'Accept' buttons.")
+
+        if not accept_buttons:
+            logger.error("No 'Accept' buttons found.")
+            return 0
+
+        for button in accept_buttons:
+            try:
+                logger.info("Clicking 'Accept' button.")
+                button.click()
+            except Exception as e:
+                logger.error(f"Error when trying to click 'Accept' button: {e}", exc_info=True)
+
+        num = self.get_pending_invitations_text()
+        logger.info(f"Found {num} pending invitations after accepting.")
+
+        return num
