@@ -45,7 +45,7 @@ class RequestsPage:
 
         try:
             logger.info("Finding pending invitations element.")
-            invitation_element = self.wait.until(EC.visibility_of_element_located((By.XPATH, "//h2[contains(text(), 'Invitations')]")))
+            invitation_element = self.wait.until(EC.visibility_of_element_located((By.XPATH, "//h2[contains(text(), 'Invitations') or contains(text(), 'No pending invitations')]")))
             logger.info(f"Invitations text found: {invitation_element.text}")
 
             return invitation_element.text

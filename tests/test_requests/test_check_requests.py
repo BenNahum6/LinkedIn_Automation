@@ -13,13 +13,14 @@ def test_check_requests(requests_page):
     """
     logger.info("Checking for pending connection requests.")
     invitations_text = requests_page.get_pending_invitations_text()
-
     logger.info(f"Invitations text: {invitations_text}")
 
-    number_of_requests = extract_number_from_invitations_text(invitations_text)
-    if number_of_requests == 0:
+    if invitations_text == 'No pending invitations':
         logger.info(f"Invitations requests is 0: {invitations_text}")
         pytest.skip("No pending requests found. Skipping the test.")
+
+    number_of_requests = extract_number_from_invitations_text(invitations_text)
+    logger.info(f"Number of requests: {number_of_requests}")
 
     if number_of_requests > 3:
         logger.info(f"Invitations requests is more than 3: {invitations_text}.")
