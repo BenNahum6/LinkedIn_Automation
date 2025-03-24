@@ -11,7 +11,7 @@ Automatically scans pending connection requests on LinkedIn and accepts them to 
 Additional automation features can be added to streamline other LinkedIn tasks.
 
 ## Technology Stack
-1. Python.
+1. Python as the primary development language.
 2. pytest for test management and execution.
 3. Selenium for browser automation.
 
