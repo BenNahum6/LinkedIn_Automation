@@ -40,17 +40,17 @@ def driver():
     driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
 
     driver.maximize_window()
-    # print("\n🔍 Checking stealth settings...\n")
-    # print("navigator.webdriver:", driver.execute_script("return navigator.webdriver"))  # צריך להחזיר None
-    # print("navigator.userAgent:",
-    #       driver.execute_script("return navigator.userAgent"))  # צריך להחזיר את ה-User-Agent שהגדרת
-    # print("navigator.languages:", driver.execute_script("return navigator.languages"))  # צריך להחזיר ['en-US', 'en']
-    #
-    # # בדיקה באתר שמזהה בוטים
-    # driver.get("https://bot.sannysoft.com/")
-    # print("\n🚀 Go to https://bot.sannysoft.com/ and check if everything is 'green'.\n")
 
-    sleep(random.uniform(2, 5))
+    print("\n🔍 Checking stealth settings...\n")
+    print("navigator.webdriver:", driver.execute_script("return navigator.webdriver"))  # Need to return None
+    print("navigator.userAgent:",driver.execute_script("return navigator.userAgent"))  # Need to return User-Agent
+    print("navigator.languages:", driver.execute_script("return navigator.languages"))  # Need to return ['en-US', 'en']
+
+    # Checking a website that detects bots
+    driver.get("https://bot.sannysoft.com/")
+    print("\n🚀 Go to https://bot.sannysoft.com/ and check if everything is 'green'.\n")
+
+    sleep(random.uniform(5, 10))
 
     yield driver
     logger.info("Deleting driver.")

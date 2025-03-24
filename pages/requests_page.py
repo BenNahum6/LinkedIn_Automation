@@ -34,3 +34,48 @@ class RequestsPage:
         except Exception as e:
             logger.error(f"Error when trying to navigate to 'My Network': {e}", exc_info=True)
             raise AssertionError("Failed to load My Network page.")
+
+    def get_pending_invitations_text(self):
+        """
+        Finds the 'Invitations' element and returns its text.
+        Waits until the element is visible on the page.
+
+        :return: The text of the Invitations element.
+        """
+        logger.info("get_pending_invitations_text started:")
+
+        try:
+            logger.info("Finding pending invitations element.")
+            invitation_element = self.wait.until(EC.visibility_of_element_located((By.XPATH, "//h2[contains(text(), 'Invitations')]")))
+            logger.info(f"Invitations text found: {invitation_element.text}")
+
+            return invitation_element.text
+        except Exception as e:
+            logger.error(f"Failed to find invitations element: {e}", exc_info=True)
+            raise AssertionError("Could not find invitations element.")
+
+    def get_show_all(self):
+        """
+        Finds and clicks the "Show all" button on the page to navigate to the invitation manager.
+
+        :return: None
+        """
+        logger.info("get_show_all started:")
+
+        try:
+            logger.info("Finding Show all element.")
+            ShowAll_element = self.wait.until(EC.element_to_be_clickable(By.CSS_SELECTOR,"a[href='https://www.linkedin.com/mynetwork/invitation-manager/']"))
+
+            logger.info(f"Clicking 'show all' button.")
+            ShowAll_element.click()
+
+            if "invitation-manager" in self.driver.current_url:
+                logger.info("Go to invitation-manager successful.")
+            else:
+                logger.error("Go to invitation-manager failed!", exc_info=True)
+                raise AssertionError("Go to invitation-manager failed.")
+
+        except Exception as e:
+            logger.error(f"Error when trying to navigate to 'show all': {e}", exc_info=True)
+            raise AssertionError("Failed to load show all page.")
+

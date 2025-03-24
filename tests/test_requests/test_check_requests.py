@@ -1,25 +1,29 @@
 import pytest
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
 from utils.logger import logger
-
+from utils.helpers import extract_number_from_invitations_text
 
 # @pytest.mark.dependency(name="check_requests")
 def test_check_requests(requests_page):
     """
+    Checks for pending connection requests and performs actions based on the number of requests.
 
-    :param requests_page:
-    :return:
+    :param requests_page: Page object representing the LinkedIn requests page.
+    :return: None
     """
     logger.info("Checking for pending connection requests.")
-    pending_requests = requests_page.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "h2[class*='_1s9oaxgp']")))
-    logger.info(pending_requests)
+    invitations_text = requests_page.get_pending_invitations_text()
 
-    # Todo need to check it works.
-    print(f"heyyyyyyyyyyy {pending_requests.text}")  # זה יחזיר: "Invitations (3)"
+    logger.info(f"Invitations text: {invitations_text}")
+    print(f"Invitations text: {invitations_text}")
+
+    number_Of_requests = extract_number_from_invitations_text(invitations_text)
+    if number_Of_requests == 0:
+        logger.info(f"Invitations requests is 0: {invitations_text}")
+        # pytest.skip("No pending requests found. Skipping the test.")
+
+    if number_Of_requests > 3:
+        requests_page.get_show_all()
 
 
-    if not pending_requests:
-        pytest.skip("No pending requests found.")
-
-    assert pending_requests, "There should be at least one pending request."
+    assert number_Of_requests > 0, "There should be at least one pending request."
+    logger.info(f"Test passed. Number of pending requests: {number_Of_requests}")
